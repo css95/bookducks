@@ -1,5 +1,171 @@
+/* BASE */
 * {
-       margin: 0;
-       padding: 0;
-       box-sizing: border-box;
-   }
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    /* Backgrounds */
+    --color-bg: #f5f1e8;
+    --color-surface: #ffffff;
+    --color-surface-alt: #ebe5d3;
+    
+    /* Text */
+    --color-text: #2d3328;
+    --color-text-muted: #5a6552;
+    
+    /* Fonts */
+    --font-heading: 'Lora', Georgia, serif;
+    --font-body: 'Inter', system-ui, sans-serif;
+    
+    /* Brand */
+    --color-accent: #6b8068;
+    --color-accent-hover: #556650;
+    
+    /* Utility */
+    --color-border: #d4cdb8;
+    --color-shadow: rgba(45, 51, 40, 0.08);
+    
+    /* Spacing scale */
+    --space-xs: 0.5rem;
+    --space-sm: 1rem;
+    --space-md: 1.5rem;
+    --space-lg: 2rem;
+    --space-xl: 3rem;
+    
+    /* Border radius */
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 16px;
+}
+
+body {
+    font-family: var(--font-body);    
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    line-height: 1.6;
+    min-height: 100vh;
+}
+
+h1, h2, h3 {
+    font-family: var(--font-heading);  
+    line-height: 1.2;
+}
+
+img {
+    max-width: 100%;
+    display: block;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+/* HEADER */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-md) var(--space-lg);
+    background-color: var(--color-surface);
+    border-bottom: 1px solid var(--color-border);
+}
+
+header h1 {
+    font-size: 1.5rem;
+    color: var(--color-accent);
+}
+
+nav {
+    display: flex;
+    gap: var(--space-md);
+}
+
+nav a {
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+nav a:hover {
+    color: var(--color-accent);
+}
+
+/* HERO */
+.hero {
+    text-align: center;
+    padding: var(--space-xl) var(--space-lg);
+    background-color: var(--color-surface-alt);
+}
+
+.hero h2 {
+    font-size: 2.5rem;
+    font-weight: 600;
+    margin-bottom: var(--space-sm);
+}
+
+/* BOOK GRID */
+.book-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: var(--space-lg);
+    padding: var(--space-lg);
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* BOOK CARDS */
+.book-card {
+    background: var(--color-surface);
+    border-radius: var(--radius-md);
+    box-shadow: 0 2px 8px var(--color-shadow);
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.book-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 16px var(--color-shadow);
+}
+
+.book-card__cover-wrapper {
+    aspect-ratio: 2/3;     
+    overflow: hidden;
+    background-color: var(--color-surface-alt);
+}
+
+.book-card__cover {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;   
+}
+
+.book-card__body {
+    padding: var(--space-md);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+}
+
+.book-card__name {
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.book-card__author {
+    font-size: 0.95rem;
+    font-weight: 400;
+    color: var(--color-text-muted);
+    font-family: var(--font-body);   /* Override the heading font */
+}
+
+.book-card__rating {
+    color: var(--color-accent);
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-top: var(--space-xs);
+}
+
+
