@@ -1,7 +1,7 @@
 async function getBooks() {
 
     try {
-        const response = await axios.get("http://localhost:1337/api/books?populate=*");
+        const response = await axios.get(`${API_BASE}/books?populate=*`);
         console.log(response.data.data);
         return response.data.data;
 
@@ -21,7 +21,7 @@ function createBookCard(book) {
 
     const bookCover = document.createElement("img");
     bookCover.className = "book-card__cover";
-    bookCover.src = `http://localhost:1337${book.cover.url}`;
+    bookCover.src = `${API_URL}${book.cover.url}`;
     bookCover.alt = book.title;
     bookCover.loading = "lazy";
     
@@ -48,6 +48,10 @@ function createBookCard(book) {
 
     bookCard.appendChild(coverSection);
     bookCard.appendChild(bookCardBody);
+
+    bookCard.addEventListener("click", () => {
+        window.location.href = `book.html?id=${book.id}`;
+    });
 
     return bookCard;
 }
