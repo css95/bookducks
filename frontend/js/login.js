@@ -2,6 +2,8 @@ const loginForm = document.getElementById("login-form");
 
 loginForm.addEventListener("submit", async (event) => {
     event.preventDefault();
+
+    document.getElementById("form-error").textContent = "";
     
     const identifier = document.getElementById("identifier").value;
     const password = document.getElementById("password").value;
