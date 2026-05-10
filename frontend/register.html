@@ -9,6 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
     <script src="js/config.js" defer></script>
+    <script src="js/nav.js" defer></script> 
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js" defer></script>
     <script src="js/register.js" defer></script>
 </head>
@@ -16,9 +17,9 @@
 <body>
     <header>
         <h1><a href="index.html">Book Ducks</a></h1>
-        <nav>
+        <nav id="main-nav">
             <a href="index.html">Books</a>
-            <a href="login.html">Login</a>
+            <span id="nav-auth"></span>
         </nav>
     </header>
 
