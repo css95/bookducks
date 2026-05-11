@@ -13,9 +13,9 @@
   "attributes": {
     "theme": {
       "type": "enumeration",
-      "default": "warm ",
+      "default": "warm",
       "enum": [
-        "warm ",
+        "warm",
         "light",
         "dark"
       ]

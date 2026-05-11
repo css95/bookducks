@@ -30,7 +30,6 @@ async function loadBook() {
     }
 }
 
-
 function renderBook(book) {
     const bookDetail = document.getElementById("book-detail");
 

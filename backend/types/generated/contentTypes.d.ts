@@ -484,8 +484,8 @@ export interface ApiSiteSettingSiteSetting extends Struct.SingleTypeSchema {
     > &
       Schema.Attribute.Private;
     publishedAt: Schema.Attribute.DateTime;
-    theme: Schema.Attribute.Enumeration<['warm ', 'light', 'dark']> &
-      Schema.Attribute.DefaultTo<'warm '>;
+    theme: Schema.Attribute.Enumeration<['warm', 'light', 'dark']> &
+      Schema.Attribute.DefaultTo<'warm'>;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
