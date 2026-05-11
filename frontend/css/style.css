@@ -337,5 +337,127 @@ header h1 {
     background-color: var(--color-accent-hover);
 }
 
+/* PROFILE PAGE */
+.profile {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: var(--space-xl) var(--space-lg);
+}
+
+#profile-greeting {
+    font-size: 2rem;
+    margin-bottom: var(--space-lg);
+}
+
+.profile__section {
+    background: var(--color-surface);
+    padding: var(--space-lg);
+    border-radius: var(--radius-md);
+    box-shadow: 0 2px 8px var(--color-shadow);
+    margin-bottom: var(--space-lg);
+}
+
+.profile__list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-md);
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+}
+
+.profile__list-header h3 {
+    font-size: 1.5rem;
+}
+
+.profile__sort {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-xs);
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+}
+
+.profile__sort select {
+    padding: var(--space-xs) var(--space-sm);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    background: var(--color-bg);
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    cursor: pointer;
+}
+
+.profile__sort select:focus {
+    outline: none;
+    border-color: var(--color-accent);
+}
+
+.profile__list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+}
+
+.profile__emptyList {
+    font-style: italic;
+    color: var(--color-text-muted);
+    text-align: center;
+    padding: var(--space-md);
+}
+
+.profile-book-card {
+    display: flex;
+    gap: var(--space-md);
+    align-items: center;
+    padding: var(--space-sm);
+    background: var(--color-bg);
+    border-radius: var(--radius-md);
+}
+
+.profile-book-card__cover {
+    width: 60px;
+    aspect-ratio: 2/3;
+    object-fit: cover;
+    border-radius: var(--radius-sm);
+    flex-shrink: 0; 
+}
+
+.profile-book-card__info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.profile-book-card__title {
+    font-size: 1.05rem;
+    font-weight: 600;
+}
+
+.profile-book-card__author {
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+    font-family: var(--font-body);
+}
+
+.profile-book-card__remove-btn {
+    padding: var(--space-xs) var(--space-sm);
+    background: transparent;
+    color: var(--color-text-muted);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.profile-book-card__remove-btn:hover {
+    background: var(--color-bg);
+    color: #c44545;
+    border-color: #c44545;
+}
 
 
