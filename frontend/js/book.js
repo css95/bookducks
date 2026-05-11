@@ -67,7 +67,7 @@ function renderBook(book) {
 
     const date = document.createElement("p");
     date.className = "book-detail__date";
-    const formattedDate = new Date(book.publishedDate).toLocaleDateString("en-UK", {
+    const formattedDate = new Date(book.publishedDate).toLocaleDateString("en-GB", {
         year: "numeric", month: "long", day: "numeric"
     });
     date.textContent = `Published: ${formattedDate}`;
@@ -83,11 +83,7 @@ function renderBook(book) {
     // INFO - Save section (placeholder)
     const saveSection = document.createElement("div");
     saveSection.className = "book-detail__save-section";
-    const savePlaceholder = document.createElement("p");
-    savePlaceholder.textContent = "Log in to save this book";
-    savePlaceholder.style.fontStyle = "italic";
-    savePlaceholder.style.color = "var(--color-text-muted)";
-    saveSection.appendChild(savePlaceholder);
+
 
     // INFO - Rate section (placeholder)
     const rateSection = document.createElement("div");
@@ -104,7 +100,88 @@ function renderBook(book) {
 
     bookDetail.appendChild(cover);
     bookDetail.appendChild(info);
+    renderSaveSection(book, saveSection);
 
+}
+
+async function renderSaveSection(book, saveSection) {
+    saveSection.innerHTML = "";
+
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+        const placeholder = document.createElement("p");
+        placeholder.textContent = "Log in to save this book";
+        placeholder.style.fontStyle = "italic";
+        placeholder.style.color = "var(--color-text-muted)";
+        saveSection.appendChild(placeholder);
+        return;
+    }
+
+    try {
+        const response = await axios.get(`${API_BASE}/users/me?populate=*`, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+        const user = response.data;
+        const savedBooks = user.savedBooks || [];
+
+        const isSaved = savedBooks.some(b => b.id === book.id);
+
+        const button = document.createElement("button");
+        button.className = "btn btn--primary";
+
+        if (isSaved) {
+            button.textContent = "Remove from list";
+
+            button.addEventListener("click", () => unsaveBook(book, user.id, savedBooks, saveSection));
+        } else {
+            button.textContent = "Save to list";
+            button.addEventListener("click", () => saveBook(book, user.id, savedBooks, saveSection));
+        }
+
+        saveSection.appendChild(button);
+    } catch (error) {
+        console.error("Failed to load saved status:", error);
+    }
+}
+
+async function saveBook(book, userId, currentSavedBooks, saveSection) {
+    const token = localStorage.getItem("token");
+    const updatedIds = [...currentSavedBooks.map(b => b.id), book.id];
+
+    try {
+        await axios.put(`${API_BASE}/users/${userId}`, {
+            savedBooks: updatedIds
+        }, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+
+        renderSaveSection(book, saveSection);
+
+    } catch (error) {
+        console.error("Failed to save book:", error);
+    }
+}
+
+async function unsaveBook(book, userId, currentSavedBooks, saveSection) {
+    const token = localStorage.getItem("token");
+
+    const updatedIds = currentSavedBooks
+        .filter(b => b.id !== book.id)
+        .map(b => b.id);
+
+    try {
+        await axios.put(`${API_BASE}/users/${userId}`, {
+            savedBooks: updatedIds 
+        }, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+
+        renderSaveSection(book, saveSection);
+
+    } catch (error) {
+        console.error("Failed to remove book:", error);
+    }
 }
 
 loadBook();
