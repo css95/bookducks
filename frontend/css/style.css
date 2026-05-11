@@ -419,9 +419,10 @@ header h1 {
     gap: var(--space-sm);
 }
 
-.profile__emptyList {
+.profile__empty-saved-list 
+.profile__empty-rated-list {
     font-style: italic;
-    color: var(--color-text-muted);
+    color: var(--color-text-muted); 
     text-align: center;
     padding: var(--space-md);
 }
@@ -512,3 +513,49 @@ header h1 {
     border-color: var(--color-accent);
 }
 
+.rated-book-card {
+    display: flex;
+    gap: var(--space-md);
+    align-items: center;
+    padding: var(--space-sm);
+    background: var(--color-bg);
+    border-radius: var(--radius-md);
+    transition: background 0.2s ease;
+}
+
+.rated-book-card:hover {
+    background: var(--color-surface-alt);
+}
+
+.rated-book-card__cover {
+    width: 60px;
+    aspect-ratio: 2/3;
+    object-fit: cover;
+    border-radius: var(--radius-sm);
+    flex-shrink: 0;
+}
+
+.rated-book-card__info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.rated-book-card__title {
+    font-size: 1.05rem;
+    font-weight: 600;
+}
+
+.rated-book-card__author {
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+    font-family: var(--font-body);
+}
+
+.rated-book-card__score {
+    color: var(--color-accent);
+    font-weight: 700;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+}

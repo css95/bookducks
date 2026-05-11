@@ -6,8 +6,9 @@ async function getCurrentUser() {
         return;
     }
 
-    const response = await axios.get(`${API_BASE}/users/me?populate[savedBooks][populate]=cover`, {
-        headers: { Authorization: `Bearer ${token}`}
+    const response = await axios.get(
+        `${API_BASE}/users/me?populate[savedBooks][populate]=cover&populate[ratings][populate][book][populate]=cover`, 
+        { headers: { Authorization: `Bearer ${token}`}
     });
 
     return response.data;
@@ -17,9 +18,28 @@ async function loadProfile() {
     const user = await getCurrentUser();
     document.getElementById("profile-greeting").textContent = `Welcome, ${user.username}`;
 
-    renderSavedBooks(user.savedBooks);
+    const savedBooks = (user.savedBooks || []).sort((a, b) => a.title.localeCompare(b.title));
 
-    setupSort(user.savedBooks);
+    const uniqueRatings = [];
+    const collectedRatingIds = [];
+
+    for (const rating of (user.ratings || [])) {
+        const alreadyAdded = collectedRatingIds.includes(rating.documentId);
+
+        if (!alreadyAdded) {
+            collectedRatingIds.push(rating.documentId);
+            uniqueRatings.push(rating);
+        }
+    }
+
+    const ratings = uniqueRatings.sort((a, b) => 
+        a.book.title.localeCompare(b.book.title)
+    );
+
+    renderSavedBooks(savedBooks);
+    setupSort(savedBooks);  
+    renderRatedBooks(ratings);
+    setupRatingSort(ratings);
 
 }
 
@@ -37,14 +57,35 @@ function setupSort(savedBooks) {
     });
 }
 
+function setupRatingSort(ratings) {
+    const dropdown = document.getElementById("sort-rated-books");
+
+    dropdown.addEventListener("change", () => {
+        const sortBy = dropdown.value;
+
+        ratings.sort((a, b) => {
+            if (sortBy === "score") {
+                return b.score - a.score;
+            } else {
+                return a.book[sortBy].localeCompare(b.book[sortBy]);
+            }
+        }); 
+
+        const list = document.getElementById("rated-books-list");
+        list.innerHTML = "";
+        renderRatedBooks(ratings);
+    })
+
+}
+
 function renderSavedBooks(books) {
     const savedBooksList = document.getElementById("saved-books-list");
 
     if (books.length === 0) {
-        const emptyList = document.createElement("p");
-        emptyList.className = "profile__emptyList";
-        emptyList.textContent = "Your book list is empty";
-        savedBooksList.appendChild(emptyList);
+        const emptySavedList = document.createElement("p");
+        emptySavedList.className = "profile__empty-saved-list";
+        emptySavedList.textContent = "Your book list is empty";
+        savedBooksList.appendChild(emptySavedList);
         return;
     }
 
@@ -53,6 +94,23 @@ function renderSavedBooks(books) {
         savedBooksList.appendChild(bookCard);
     });
 
+}
+
+function renderRatedBooks(ratings) {
+    const ratedBooksList = document.getElementById("rated-books-list");
+
+    if (ratings.length === 0) {
+        const emptyRatedList = document.createElement("p");
+        emptyRatedList.className = "profile__empty-rated-list";
+        emptyRatedList.textContent = "You have no rated books.";
+        ratedBooksList.appendChild(emptyRatedList);
+        return;
+    }
+
+    ratings.forEach((rating) => {
+        const ratingCard = createRatedBookCard(rating);
+        ratedBooksList.appendChild(ratingCard);
+    });
 }
 
 function createProfileBookCard(book) {
@@ -116,6 +174,47 @@ function createProfileBookCard(book) {
 
     return profileBookCard;
 
+}
+
+function createRatedBookCard(rating) {
+
+    const ratedBookCard = document.createElement("div");
+    ratedBookCard.className = "rated-book-card";
+    ratedBookCard.style.cursor = "pointer";
+
+    const ratedBookCover = document.createElement("img");
+    ratedBookCover.className = "rated-book-card__cover";
+    ratedBookCover.src = `${API_URL}${rating.book.cover.url}`;
+    ratedBookCover.alt = rating.book.title;
+    ratedBookCover.loading = "lazy";
+
+    const ratedBookInfo = document.createElement("div");
+    ratedBookInfo.className = "rated-book-card__info";
+
+    const ratedBookTitle = document.createElement("h4");
+    ratedBookTitle.className = "rated-book-card__title";
+    ratedBookTitle.textContent = rating.book.title;
+
+    const ratedBookAuthor = document.createElement("p");
+    ratedBookAuthor.className = "rated-book-card__author";
+    ratedBookAuthor.textContent = rating.book.author;
+
+    const ratedBookScore = document.createElement("p");
+    ratedBookScore.className = "rated-book-card__score";
+    ratedBookScore.textContent = `⭐ ${rating.score} / 10`;
+
+    ratedBookInfo.appendChild(ratedBookTitle);
+    ratedBookInfo.appendChild(ratedBookAuthor);
+
+    ratedBookCard.appendChild(ratedBookCover);
+    ratedBookCard.appendChild(ratedBookInfo);
+    ratedBookCard.appendChild(ratedBookScore);
+
+    ratedBookCard.addEventListener("click", () => {
+        window.location.href = `book.html?id=${rating.book.id}`;
+    });
+
+    return ratedBookCard;
 }
 
 loadProfile();
