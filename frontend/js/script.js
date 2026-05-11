@@ -2,7 +2,6 @@ async function getBooks() {
 
     try {
         const response = await axios.get(`${API_BASE}/books?populate=*`);
-        console.log(response.data.data);
         return response.data.data;
 
     } catch (error) {
@@ -11,7 +10,25 @@ async function getBooks() {
     }
 }
 
-function createBookCard(book) {
+async function getAllRatings() {
+    try {
+        const response = await axios.get(`${API_BASE}/ratings?populate=*`);
+        return response.data.data;
+    } catch (error) {
+        console.error("Failed to fetch ratings:", error);
+        return [];
+    }
+}
+
+function calculateAverage(ratings) {
+    if (ratings.length === 0) {
+        return null;
+    }
+    const sum = ratings.reduce((total, rating) => total + rating.score, 0);
+    return sum / ratings.length;
+}
+
+function createBookCard(book, bookRatings) {
     const bookCard = document.createElement("div");
     bookCard.className = "book-card";
     bookCard.style.cursor = "pointer";
@@ -38,10 +55,17 @@ function createBookCard(book) {
 
     const bookRating = document.createElement("p");
     bookRating.className = "book-card__rating";
-    bookRating.textContent = "★ –/10";
-    
-    coverSection.appendChild(bookCover);
 
+    const average = calculateAverage(bookRatings);
+
+    if (average === null) {
+        bookRating.textContent = "No ratings yet!";
+    } else {
+        const rounded = average.toFixed(1);
+        bookRating.textContent = `⭐ ${rounded} / 10 (${bookRatings.length} ratings)`;
+    }
+
+    coverSection.appendChild(bookCover);
     bookCardBody.appendChild(bookName);
     bookCardBody.appendChild(bookAuthor);
     bookCardBody.appendChild(bookRating);
@@ -59,13 +83,15 @@ function createBookCard(book) {
 async function renderBooks() {
 
     const books = await getBooks();
+    const allRatings = await getAllRatings();
     const bookList = document.getElementById("bookList");
 
     books.forEach((book) => {
-        const bookCard = createBookCard(book);
-        bookList.appendChild(bookCard);
-    })
+        const bookRatings = allRatings.filter(r => r.book.id === book.id);
 
+        const bookCard = createBookCard(book, bookRatings);
+        bookList.appendChild(bookCard);
+    });
 }
 
 renderBooks();

@@ -23,14 +23,14 @@ async function loadBook() {
             return;
         }
         
-        renderBook(book);
+        await renderBook(book);
 
     } catch (error) {
         console.error("Failed to load book:", error);
     }
 }
 
-function renderBook(book) {
+async function renderBook(book) {
     const bookDetail = document.getElementById("book-detail");
 
     // LEFT COLUMN - COVER
@@ -71,12 +71,26 @@ function renderBook(book) {
     });
     date.textContent = `Published: ${formattedDate}`;
 
+    const averageRating = document.createElement("p");
+    averageRating.className = "book-detail__average-rating";
+
+    const ratings = await getBookRatings(book.id);
+    const average = calculateAverage(ratings);
+
+    if (average === null) {
+        averageRating.textContent = "No ratings yet!";
+    } else {
+        const rounded = average.toFixed(1);
+        averageRating.textContent = `⭐ ${rounded} / 10 (${ratings.length} ratings)`;
+    }
+
     meta.appendChild(pages);
     meta.appendChild(date);
 
     titleSection.appendChild(title);
     titleSection.appendChild(author);
     titleSection.appendChild(meta);
+    titleSection.appendChild(averageRating);
 
 
     // INFO - Save section (placeholder)
@@ -181,6 +195,25 @@ async function unsaveBook(book, userId, currentSavedBooks, saveSection) {
     } catch (error) {
         console.error("Failed to remove book:", error);
     }
+}
+
+async function getBookRatings(bookId) {
+    try {
+        const response = await axios.get(`${API_BASE}/ratings?populate=*&filters[book][id][$eq]=${bookId}`);
+        return response.data.data;
+    } catch (error) {
+        console.error("Failed to fetch ratings:", error);
+        return [];
+    }
+}
+
+function calculateAverage(ratings) {
+    if (ratings.length === 0) {
+        return null;
+    }
+
+    const sum = ratings.reduce((total, rating) => total + rating.score, 0);
+    return sum / ratings.length;
 }
 
 loadBook();
