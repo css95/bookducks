@@ -1,3 +1,21 @@
+async function getCurrentUser() {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+        return null;
+    }
+
+    try {
+        const response = await axios.get(`${API_BASE}/users/me?populate[savedBooks][populate]=cover`, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+        return response.data;
+    } catch (error) {
+        console.error("Failed to fetch user:", error);
+        return null;
+    }
+}
+
 async function loadBook() {
     const params = new URLSearchParams(window.location.search);
     const bookId = params.get("id");
@@ -102,10 +120,6 @@ async function renderBook(book) {
     const rateSection = document.createElement("div");
     rateSection.className = "book-detail__rate-section";
     const ratePlaceholder = document.createElement("p");
-    ratePlaceholder.textContent = "Log in to rate this book";
-    ratePlaceholder.style.fontStyle = "italic";
-    ratePlaceholder.style.color = "var(--color-text-muted)";
-    rateSection.appendChild(ratePlaceholder);
 
     info.appendChild(titleSection);
     info.appendChild(saveSection);
@@ -114,6 +128,7 @@ async function renderBook(book) {
     bookDetail.appendChild(cover);
     bookDetail.appendChild(info);
     renderSaveSection(book, saveSection);
+    renderRateSection(book, rateSection);
 
 }
 
@@ -156,6 +171,63 @@ async function renderSaveSection(book, saveSection) {
     } catch (error) {
         console.error("Failed to load saved status:", error);
     }
+}
+
+async function renderRateSection(book, rateSection) {
+    rateSection.innerHTML = "";
+
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+        const placeholder = document.createElement("p");
+        placeholder.textContent = "Log in to rate this book";
+        placeholder.style.fontStyle = "italic";
+        placeholder.style.color = "var(--color-text-muted)";
+        rateSection.appendChild(placeholder);
+        return;
+    }
+
+    try {
+        const currentUser = await getCurrentUser();
+
+        const ratings = await getBookRatings(book.id);
+        const userRating = ratings.find(r => r.user && r.user.id === currentUser.id); 
+
+        const heading = document.createElement("h3");
+
+        if (userRating) {
+            heading.textContent = `Your rating: ${userRating.score} / 10`;
+        } else {
+            heading.textContent = "Rate this book";
+        }
+
+        rateSection.appendChild(heading);
+
+        const rateButtons = document.createElement("div");
+        rateButtons.className = "rating-buttons";
+
+        for (let i = 1; i <= 10; i++) {
+            const btn = document.createElement("button");
+            btn.textContent = i;
+            btn.className = "rating-btn";
+
+            if (userRating && userRating.score === i) {
+                btn.classList.add("rating-btn--selected");
+            }
+
+            btn.addEventListener("click", () => {
+                submitRating(i, book, userRating, rateSection);
+            });
+
+            rateButtons.appendChild(btn);
+        }
+
+        rateSection.appendChild(rateButtons);
+
+    } catch (error) {
+        console.error("Failed to load rate section:", error);
+    }
+
 }
 
 async function saveBook(book, userId, currentSavedBooks, saveSection) {
@@ -214,6 +286,35 @@ function calculateAverage(ratings) {
 
     const sum = ratings.reduce((total, rating) => total + rating.score, 0);
     return sum / ratings.length;
+}
+
+async function submitRating(score, book, existingRating, rateSection) {
+    const token = localStorage.getItem("token");
+    const currentUser = await getCurrentUser();
+
+    try {
+        if (existingRating) {
+            await axios.put(`${API_BASE}/ratings/${existingRating.documentId}`, {
+                data: { score: score }
+            }, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+        } else {
+            await axios.post(`${API_BASE}/ratings`, {
+                data: {
+                    score: score,
+                    user: currentUser.id,
+                    book: book.id
+                }
+            }, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+        }
+
+        window.location.reload();
+    } catch (error) {
+        console.error("Failed to submit rating:", error);
+    }
 }
 
 loadBook();
