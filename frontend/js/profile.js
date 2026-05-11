@@ -19,6 +19,22 @@ async function loadProfile() {
 
     renderSavedBooks(user.savedBooks);
 
+    setupSort(user.savedBooks);
+
+}
+
+function setupSort(savedBooks) {
+    const dropdown = document.getElementById("sort-saved-books");
+
+    dropdown.addEventListener("change", () => {
+        const sortBy = dropdown.value;
+
+        savedBooks.sort((a, b) => a[sortBy].localeCompare(b[sortBy]));
+
+        const list = document.getElementById("saved-books-list");
+        list.innerHTML = "";
+        renderSavedBooks(savedBooks);
+    });
 }
 
 function renderSavedBooks(books) {
