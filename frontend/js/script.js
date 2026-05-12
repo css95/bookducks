@@ -24,7 +24,9 @@ async function getBooks() {
 
 async function getAllRatings() {
     try {
-        const response = await axios.get(`${API_BASE}/ratings?populate=*`);
+        const response = await axios.get(`${API_BASE}/ratings?populate=*&pagination[pageSize]=100`);
+        console.log("Total ratings fetched:", response.data.data.length);
+        console.log("Pagination info:", response.data.meta);
         return response.data.data;
     } catch (error) {
         console.error("Failed to fetch ratings:", error);

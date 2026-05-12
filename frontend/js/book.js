@@ -163,7 +163,7 @@ async function renderSaveSection(book, saveSection) {
 
             button.addEventListener("click", () => unsaveBook(book, user.id, savedBooks, saveSection));
         } else {
-            button.textContent = "Save to list";
+            button.textContent = "Save to reading list";
             button.addEventListener("click", () => saveBook(book, user.id, savedBooks, saveSection));
         }
 
@@ -271,7 +271,7 @@ async function unsaveBook(book, userId, currentSavedBooks, saveSection) {
 
 async function getBookRatings(bookId) {
     try {
-        const response = await axios.get(`${API_BASE}/ratings?populate=*&filters[book][id][$eq]=${bookId}`);
+        const response = await axios.get(`${API_BASE}/ratings?populate=*&filters[book][id][$eq]=${bookId}&pagination[pageSize]=100`);
         return response.data.data;
     } catch (error) {
         console.error("Failed to fetch ratings:", error);

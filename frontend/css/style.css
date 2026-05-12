@@ -29,6 +29,12 @@ body {
     color: var(--color-text);
     line-height: 1.6;
     min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
 }
 
 h1, h2, h3 {
@@ -95,7 +101,7 @@ body.theme-warm {
 }
 
 body.theme-light {
-    --color-bg: #f4f1ec;       
+    --color-bg: #fffcf7;       
     --color-surface: #ffffff;   
     /* --color-surface-alt: #ebe6dc; */
     --color-surface-alt: #f5ebd9;
