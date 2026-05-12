@@ -5,9 +5,22 @@ and rate books from 1-10. Admins can add new books directly from the website.
 Final project for the "Interaction with CMS" course at Nackademin.
 
 ## How to run
-
 1. Navigate to the backend folder: `cd backend`
 2. Install dependencies: `npm install`
 3. Start Strapi: `npm run develop`
 4. Strapi runs at http://localhost:1337
 5. Open `frontend/index.html` in a browser (or use VS Code Live Server)
+
+## Test User
+Username: testuser
+Email: test@bookducks.com
+Password: Test1234
+
+## Test Admin
+Username: admin
+Email: admin@bookducks.com
+Password: Admin1234
+
+## Super Admin
+Email: steilner.carolin@gmail.com
+Password: superAdmin1234

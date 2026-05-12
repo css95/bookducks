@@ -656,27 +656,23 @@ header h1 {
         align-items: flex-start;
         gap: var(--space-sm);
     }
-    
-    /* Smaller card padding */
+
     .profile-book-card,
     .rated-book-card {
         padding: var(--space-xs);
         gap: var(--space-sm);
     }
     
-    /* Smaller covers on mobile */
     .profile-book-card__cover,
     .rated-book-card__cover {
         width: 50px;
     }
-    
-    /* Allow info to shrink */
+
     .profile-book-card__info,
     .rated-book-card__info {
         min-width: 0;
     }
     
-    /* Smaller fonts to fit */
     .profile-book-card__title,
     .rated-book-card__title {
         font-size: 0.95rem;
@@ -687,14 +683,12 @@ header h1 {
     .rated-book-card__author {
         font-size: 0.85rem;
     }
-    
-    /* Smaller remove button */
+
     .profile-book-card__remove-btn {
         padding: var(--space-xs);
         font-size: 0.8rem;
     }
     
-    /* Smaller rating score */
     .rated-book-card__score {
         font-size: 0.95rem;
     }
