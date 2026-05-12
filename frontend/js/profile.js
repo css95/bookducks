@@ -16,8 +16,9 @@ async function getCurrentUser() {
 
 async function loadProfile() {
     const user = await getCurrentUser();
-
-    document.getElementById("profile-greeting").textContent = `Welcome, ${user.username}`;
+    
+    const capitalizedName = user.username.charAt(0).toUpperCase() + user.username.slice(1);
+    document.getElementById("profile-greeting").textContent = `You're logged in as ${capitalizedName}`;
 
     const savedBooks = (user.savedBooks || []).sort((a, b) => a.title.localeCompare(b.title));
 

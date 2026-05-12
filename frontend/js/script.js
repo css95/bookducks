@@ -1,3 +1,15 @@
+function updateHeroGreeting() {
+     const heading = document.getElementById("hero-heading");
+    if (!heading) return;
+    
+    const userJson = localStorage.getItem("user");
+    if(!userJson) return;
+
+    const user = JSON.parse(userJson);
+    const capitalizedName = user.username.charAt(0).toUpperCase() + user.username.slice(1);
+    document.getElementById("hero-heading").textContent = `Welcome to Book Ducks, ${capitalizedName}!`;
+}
+
 async function getBooks() {
 
     try {
@@ -94,4 +106,5 @@ async function renderBooks() {
     });
 }
 
+updateHeroGreeting();
 renderBooks();
