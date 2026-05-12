@@ -16,6 +16,7 @@ async function getCurrentUser() {
 
 async function loadProfile() {
     const user = await getCurrentUser();
+
     document.getElementById("profile-greeting").textContent = `Welcome, ${user.username}`;
 
     const savedBooks = (user.savedBooks || []).sort((a, b) => a.title.localeCompare(b.title));
