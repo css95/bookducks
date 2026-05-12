@@ -82,6 +82,7 @@ function setupForm() {
             });
 
             form.reset();
+            window.location.href = "index.html";
 
         } catch (error) {
             document.getElementById("form-error").textContent = "Failed to add book.";
