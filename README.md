@@ -10,17 +10,3 @@ Final project for the "Interaction with CMS" course at Nackademin.
 3. Start Strapi: `npm run develop`
 4. Strapi runs at http://localhost:1337
 5. Open `frontend/index.html` in a browser (or use VS Code Live Server)
-
-## Test User
-Username: testuser
-Email: test@bookducks.com
-Password: Test1234
-
-## Test Admin
-Username: admin
-Email: admin@bookducks.com
-Password: Admin1234
-
-## Super Admin
-Email: steilner.carolin@gmail.com
-Password: superAdmin1234
