@@ -52,7 +52,7 @@ function createBookCard(book, bookRatings) {
 
     const bookCover = document.createElement("img");
     bookCover.className = "book-card__cover";
-    bookCover.src = `${API_URL}${book.cover.url}`;
+    bookCover.src = getImageUrl(book.cover.url);
     bookCover.alt = book.title;
     bookCover.loading = "lazy";
     

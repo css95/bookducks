@@ -54,7 +54,7 @@ async function renderBook(book) {
     // LEFT COLUMN - COVER
     const cover = document.createElement("img");
     cover.className = "book-detail__cover";
-    cover.src = `${API_URL}${book.cover.url}`;
+    cover.src = getImageUrl(book.cover.url);
     cover.alt = book.title;
     cover.loading = "lazy";
 
