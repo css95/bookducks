@@ -123,7 +123,7 @@ function createProfileBookCard(book) {
 
     const profileBookCover = document.createElement("img");
     profileBookCover.className = "profile-book-card__cover";
-    profileBookCover.src = `${API_URL}${book.cover.url}`;
+    profileBookCover.src = getImageUrl(book.cover.url);
     profileBookCover.alt = book.title;
     profileBookCover.loading = "lazy";
 
@@ -186,7 +186,7 @@ function createRatedBookCard(rating) {
 
     const ratedBookCover = document.createElement("img");
     ratedBookCover.className = "rated-book-card__cover";
-    ratedBookCover.src = `${API_URL}${rating.book.cover.url}`;
+    ratedBookCover.src = getImageUrl(rating.book.cover.url);
     ratedBookCover.alt = rating.book.title;
     ratedBookCover.loading = "lazy";
 
